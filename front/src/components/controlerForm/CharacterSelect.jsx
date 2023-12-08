@@ -30,10 +30,10 @@ function CharacterSelect({
                 } // Vérifier si c'est le personnage sélectionné
               />
               <label
-                className="cursor-pointer shadow-md text-xl font-medium px-8 py-3 rounded-3xl transition-all duration-300 hover:text-stone-900 hover:shadow-lg"
+                className="cursor-pointer capitalize shadow-md text-xl  font-medium px-8 py-3 rounded-3xl transition-all duration-300 hover:text-stone-900 hover:shadow-lg"
                 htmlFor={index}
               >
-                {iaCharacter.name} - {iaCharacter.nickName}
+                {iaCharacter.name} - {iaCharacter.title}
               </label>
             </div>
           );

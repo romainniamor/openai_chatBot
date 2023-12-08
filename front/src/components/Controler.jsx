@@ -1,27 +1,33 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import Title from "./controlerChat/Title";
 import RecordMessage from "./controlerChat/RecordMessage";
 import axios from "axios";
 import CharacterSelect from "./controlerForm/CharacterSelect";
 
 function Controler() {
-  const iaCharacters = [
-    {
-      name: "Walter",
-      nickName: "The Wise Man",
-      description:
-        " Walter is an elderly gentleman, known for concise sentences.lending an ear to othleman, known for concise sentences.lending an ear to othleman, known for concise sentences.lending an ear to others.",
-    },
-    {
-      name: "Samantha",
-      nickName: "The Pretty B",
-      description:
-        "Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, voluptatum.",
-    },
-  ];
-
+  const [iaCharacters, setIaCharacters] = useState([]);
   const [hoveredCharacter, setHoveredCharacter] = useState(null);
-  const [selectedCharacter, setSelectedCharacter] = useState(iaCharacters[0]);
+  const [selectedCharacter, setSelectedCharacter] = useState(null);
+
+  // get character from api on mounted
+  useEffect(() => {
+    getCharacter();
+  }, []);
+
+  const getCharacter = () => {
+    axios
+      .get("http://localhost:8000/characters")
+      .then((res) => {
+        console.log("appel api pour avoir les personnages");
+        const iaCharacters = res.data;
+        console.log("iaCharacters", iaCharacters);
+        setIaCharacters(iaCharacters);
+        setSelectedCharacter(iaCharacters[0]); // first one by default
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
 
   const [isLoading, setIsLoading] = useState(false);
   const [messages, setMessages] = useState([]);

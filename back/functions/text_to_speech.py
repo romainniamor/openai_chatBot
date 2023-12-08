@@ -10,6 +10,9 @@ ELEVEN_LABS_KEY = os.getenv("ELEVEN_LABS_KEY")
 
 
 
+
+
+
 #ELEVEN_LABS API - https://developers.eleven-labs.com/documentation/eleven-labs-api
 #Convert text to speech
 
@@ -18,7 +21,7 @@ def convert_text_to_speech(message):
     #define body
     data = {
         'text': message,
-        "model_id": "eleven_monolingual_v1",
+        "model_id": "eleven_multilingual_v2",
         "voice_settings": {
              "stability": 0.5,
              "similarity_boost": 0.5
@@ -26,13 +29,13 @@ def convert_text_to_speech(message):
     }
 
     #define voice
-    voice_russel = 'Rd3nuFjUic1hJBsOa0zu'
-    voice_joanne   = 'RbgOsd1xIPlj7jtSkpnG'
+    man_voice = 'Rd3nuFjUic1hJBsOa0zu'
+    women_voice   = 'RbgOsd1xIPlj7jtSkpnG'
 
     headers = {'xi-api-key': ELEVEN_LABS_KEY,
                 'Content-Type': 'application/json',
                   'Accept': 'audio/mpeg'}
-    endpoint = f"https://api.elevenlabs.io/v1/text-to-speech/{voice_russel}"
+    endpoint = f"https://api.elevenlabs.io/v1/text-to-speech/{women_voice}"
 
     #send request
 

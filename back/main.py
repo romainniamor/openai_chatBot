@@ -9,6 +9,7 @@ from dotenv import load_dotenv
 from functions.openai_requests import convert_audio_to_text, get_chat_response
 from functions.database import get_messages, store_messages, reset_db
 from functions.text_to_speech import convert_text_to_speech
+from functions.database import characters
 
 
 #initiate app
@@ -34,6 +35,10 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+@app.get('/characters')
+async def get_characters():
+    return characters()
 
 
 
