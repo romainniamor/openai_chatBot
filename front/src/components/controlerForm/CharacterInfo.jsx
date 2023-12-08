@@ -5,7 +5,6 @@ function CharcterInfo({ iaCharacter }) {
   const characterBio = useRef(null);
 
   useEffect(() => {
-    console.log(!iaCharacter ? "no character" : "character");
     if (iaCharacter) {
       gsap.fromTo(
         characterBio.current,

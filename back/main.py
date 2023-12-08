@@ -10,6 +10,7 @@ from functions.openai_requests import convert_audio_to_text, get_chat_response
 from functions.database import get_messages, store_messages, reset_db
 from functions.text_to_speech import convert_text_to_speech
 from functions.database import characters
+from functions.database import CHARACTERS
 
 
 #initiate app
@@ -40,12 +41,22 @@ app.add_middleware(
 async def get_characters():
     return characters()
 
+@app.post('/select-character')
+async def select_character(selection):
+    print("selecting character")
+
+    for character in CHARACTERS:
+        if character['id'] == selection:
+            print('character selected', character['id'], character['name'])
+        return {"message": f"Selection {character['name']}  ii: {character['id']}"}
+    
+    return HTTPException(status_code=404, detail="Character not found")
+
+
 
 
 #localhost:8000/docs - documentation for all API
-@app.get("/health")
-async def check_health():
-    return {"message": "healthy"}
+
 
 #reset db messages
 @app.get("/reset")

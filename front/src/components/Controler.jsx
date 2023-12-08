@@ -89,9 +89,25 @@ function Controler() {
     setHoveredCharacter(foundCharacter); // Mettre à jour le personnage survolé
   };
 
-  const handleCharacterSelect = (character) => {
+  // select character and send to server
+  const handleCharacterSelect = async (character) => {
     const foundCharacter = iaCharacters.find((c) => c.name === character);
     setSelectedCharacter(foundCharacter);
+    console.log(
+      "selectedCharacter",
+      selectedCharacter.id,
+      selectedCharacter.name
+    );
+    await axios
+      .post("http://localhost:8000/select-character", {
+        id: selectedCharacter.id,
+      })
+      .then((res) => {
+        console.log(res.data);
+      })
+      .catch((err) => {
+        console.log(err.message);
+      });
   };
 
   return (
