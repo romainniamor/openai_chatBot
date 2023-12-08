@@ -11,6 +11,7 @@ from functions.database import get_messages, store_messages, reset_db
 from functions.text_to_speech import convert_text_to_speech
 from functions.database import characters
 from functions.database import CHARACTERS
+from pydantic import BaseModel
 
 
 #initiate app
@@ -37,18 +38,25 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+#get all characters
 @app.get('/characters')
 async def get_characters():
     return characters()
 
+
+#get selected character 
+class CharacterSelection(BaseModel):
+    id: int
+
 @app.post('/select-character')
-async def select_character(selection):
-    print("selecting character")
+async def select_character(selection: CharacterSelection):
+    selected_character_id = selection.id
+    print('selected_character_id', selected_character_id)
 
     for character in CHARACTERS:
-        if character['id'] == selection:
-            print('character selected', character['id'], character['name'])
-        return {"message": f"Selection {character['name']}  ii: {character['id']}"}
+        if character['id'] == selected_character_id:
+            selected_character = character
+            return {"message": f"Selected {selected_character['name']} with ID: {selected_character['id']}."}
     
     return HTTPException(status_code=404, detail="Character not found")
 

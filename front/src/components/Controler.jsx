@@ -93,20 +93,16 @@ function Controler() {
   const handleCharacterSelect = async (character) => {
     const foundCharacter = iaCharacters.find((c) => c.name === character);
     setSelectedCharacter(foundCharacter);
-    console.log(
-      "selectedCharacter",
-      selectedCharacter.id,
-      selectedCharacter.name
-    );
+    console.log("selectedCharacter", foundCharacter.id, foundCharacter.name);
     await axios
       .post("http://localhost:8000/select-character", {
-        id: selectedCharacter.id,
+        id: foundCharacter.id,
       })
       .then((res) => {
-        console.log(res.data);
+        console.log("response", res.data);
       })
       .catch((err) => {
-        console.log(err.message);
+        console.log("erreur post handleCharacterSelect", err.message);
       });
   };
 
