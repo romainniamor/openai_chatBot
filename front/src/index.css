@@ -1,0 +1,57 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* const css */
+:root {
+  --stone-color: rgb(28 25 23);
+}
+
+html,
+body {
+  scroll-behavior: smooth;
+  overscroll-behavior: none;
+}
+
+/* .character {
+  transition: all 0.3s ease-in-out;
+  position: relative;
+  cursor: pointer;
+}
+
+.character:hover {
+  color: rgb(28, 25, 23);
+}
+
+.character::after {
+  content: "";
+  position: absolute;
+  bottom: -8px;
+  left: 0;
+  width: 100%;
+  transform-origin: left;
+  transform: scaleX(0);
+  height: 5px;
+  background-color: rgb(28, 25, 23);
+  transition: transform 0.5s ease-in-out;
+}
+
+.character:hover::after {
+  transform: scaleX(1);
+}
+
+.character:not(:hover)::after {
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform 0.5s ease-in-out;
+} */
+
+/* Styles pour l'élément .character lorsqu'il est adjacent à un input radio checked */
+input[type="radio"] {
+  display: none;
+}
+
+.character input[type="radio"]:checked + label {
+  background-color: var(--stone-color);
+  color: white;
+}
