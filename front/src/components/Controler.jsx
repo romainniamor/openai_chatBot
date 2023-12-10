@@ -61,6 +61,7 @@ function Controler() {
   const handleCharacterSelect = async (character) => {
     const selectedCharacter = iaCharacters.find((c) => c.name === character);
     setSelectedCharacter(selectedCharacter); // select character found
+    resetConversation(); // reset conversation switch character
     console.log(
       "selected character au click:",
       selectedCharacter.id,
@@ -138,6 +139,29 @@ function Controler() {
       });
   };
 
+  const [isReset, setIsReset] = useState(false);
+
+  //reset conversation
+  const resetConversation = async () => {
+    setIsReset(true);
+
+    //call api to reset conversation empty messages
+    await axios
+      .get("http://localhost:8000/reset")
+      .then((res) => {
+        if (res.status === 200) {
+          setMessages([]);
+        } else {
+          console.log("error backend reset conversation");
+        }
+      })
+      .catch((err) => {
+        console.log("error reset conversation", err.message);
+      });
+
+    setIsReset(false);
+  };
+
   return (
     <div className="flex h-full gap-10 justify-center">
       {/*  left part   */}
@@ -145,6 +169,7 @@ function Controler() {
         <Title
           setMessages={setMessages}
           selectedCharacter={selectedCharacter}
+          resetConversation={resetConversation}
         />
         <div
           className="flex flex-col justify-between h-full overflow-y-scroll"
@@ -186,7 +211,7 @@ function Controler() {
 
             {messages.length === 0 && !isLoading && (
               <div className="text-center uppercase font-light mt-9">
-                send a message
+                send a message to {selectedCharacter.name} ...
               </div>
             )}
             {isLoading && (

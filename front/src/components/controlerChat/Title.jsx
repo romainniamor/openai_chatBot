@@ -1,29 +1,9 @@
 import { useState } from "react";
 import axios from "axios";
 
-function Title({ setMessages, selectedCharacter }) {
+function Title({ setMessages, selectedCharacter, resetConversation }) {
   const [isReset, setIsReset] = useState(false);
 
-  //reset conversation
-  const resetConversation = async () => {
-    setIsReset(true);
-
-    //call api to reset conversation empty messages
-    await axios
-      .get("http://localhost:8000/reset")
-      .then((res) => {
-        if (res.status === 200) {
-          setMessages([]);
-        } else {
-          console.log("error backend reset conversation");
-        }
-      })
-      .catch((err) => {
-        console.log("error reset conversation", err.message);
-      });
-
-    setIsReset(false);
-  };
   return (
     <div>
       <div className="flex justify-between items-center bg-stone-900 text-white font-semibold px-8 py-3 ">
