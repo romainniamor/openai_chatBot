@@ -35,7 +35,7 @@ def convert_text_to_speech(message):
     headers = {'xi-api-key': ELEVEN_LABS_KEY,
                 'Content-Type': 'application/json',
                   'Accept': 'audio/mpeg'}
-    endpoint = f"https://api.elevenlabs.io/v1/text-to-speech/{women_voice}"
+    endpoint = f"https://api.elevenlabs.io/v1/text-to-speech/{man_voice}"
 
     #send request
 

@@ -2,7 +2,8 @@
 #uvicorn main:app --reload
 #uvicorn main:app 
 
-from fastapi import FastAPI, File, UploadFile, HTTPException
+from fastapi import FastAPI, File, UploadFile, HTTPException, Form
+import json
 from fastapi.responses import StreamingResponse
 from fastapi.middleware.cors import CORSMiddleware
 from dotenv import load_dotenv
@@ -10,7 +11,6 @@ from functions.openai_requests import convert_audio_to_text, get_chat_response
 from functions.database import get_messages, store_messages, reset_db
 from functions.text_to_speech import convert_text_to_speech
 from functions.database import characters
-from functions.database import CHARACTERS
 from pydantic import BaseModel
 
 
@@ -41,7 +41,7 @@ app.add_middleware(
 #get all characters
 @app.get('/characters')
 async def get_characters():
-    return characters()
+    return characters
 
 
 #get selected character 
@@ -49,23 +49,27 @@ class CharacterSelection(BaseModel):
     id: int
 
 @app.post('/select-character')
-async def select_character(selection: CharacterSelection):
+async def select_character(selection: CharacterSelection = None):
+    if selection is None or selection.id is None:
+        # Sélection par défaut du premier personnage si aucun ID n'est spécifié
+        selected_character = characters[0]
+        print('selected_character_by_default', selected_character)
+        return selected_character
+
     selected_character_id = selection.id
     print('selected_character_id', selected_character_id)
 
-    for character in CHARACTERS:
+    for character in characters:
         if character['id'] == selected_character_id:
             selected_character = character
-            return {"message": f"Selected {selected_character['name']} with ID: {selected_character['id']}."}
+            print('selected_character', selected_character)
+            return selected_character
     
     return HTTPException(status_code=404, detail="Character not found")
 
 
 
-
 #localhost:8000/docs - documentation for all API
-
-
 #reset db messages
 @app.get("/reset")
 async def reset_conversation():
@@ -110,8 +114,3 @@ async def post_audio(file: UploadFile = File(...)):
 
     #return audio
     return StreamingResponse(iter_file(), media_type="application/octet-stream")
-
-
-
-
-

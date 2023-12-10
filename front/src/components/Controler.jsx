@@ -9,10 +9,17 @@ function Controler() {
   const [hoveredCharacter, setHoveredCharacter] = useState(null);
   const [selectedCharacter, setSelectedCharacter] = useState(null);
 
-  // get character from api on mounted
+  // get ia characters from api on mounted
   useEffect(() => {
     getCharacter();
   }, []);
+
+  useEffect(() => {
+    //select default character for server on mounted
+    if (iaCharacters.length > 0) {
+      getDefaultCharacter();
+    }
+  }, [iaCharacters]);
 
   const getCharacter = () => {
     axios
@@ -20,12 +27,55 @@ function Controler() {
       .then((res) => {
         console.log("appel api pour avoir les personnages");
         const iaCharacters = res.data;
-        console.log("iaCharacters", iaCharacters);
         setIaCharacters(iaCharacters);
         setSelectedCharacter(iaCharacters[0]); // first one by default
       })
       .catch((err) => {
         console.log(err);
+      });
+  };
+
+  const getDefaultCharacter = () => {
+    const defaultCharacter = iaCharacters[0];
+    console.log("defaultCharacter:", defaultCharacter["id"]);
+    // Appel API pour sélectionner le personnage par défaut
+    axios
+      .post("http://localhost:8000/select-character", {
+        id: defaultCharacter.id,
+      })
+      .then((res) => {
+        console.log("Default character selected:", res.data);
+        setSelectedCharacter(defaultCharacter);
+      })
+      .catch((err) => {
+        console.log("Error selecting default character:", err.message);
+      });
+  };
+  //hover character for gsap function
+  const handleCharacterHover = (character) => {
+    const foundCharacter = iaCharacters.find((c) => c.name === character);
+    setHoveredCharacter(foundCharacter); // maj character hovered
+  };
+
+  // select character and send to server
+  const handleCharacterSelect = async (character) => {
+    const selectedCharacter = iaCharacters.find((c) => c.name === character);
+    setSelectedCharacter(selectedCharacter); // select character found
+    console.log(
+      "selected character au click:",
+      selectedCharacter.id,
+      selectedCharacter.name
+    );
+
+    await axios
+      .post("http://localhost:8000/select-character", {
+        id: selectedCharacter.id,
+      })
+      .then((res) => {
+        console.log("response", res.data);
+      })
+      .catch((err) => {
+        console.log("erreur post handleCharacterSelect", err.message);
       });
   };
 
@@ -38,6 +88,7 @@ function Controler() {
   const createBlobUrl = (data) => {
     const blob = new Blob([data], { type: "audio/mpeg" });
     const url = window.URL.createObjectURL(blob);
+    console.log("url", url);
     return url;
   };
 
@@ -69,7 +120,10 @@ function Controler() {
             audio.src = createBlobUrl(blob);
 
             //append audio
-            const iaMessage = { sender: "bob", blobUrl: audio.src };
+            const iaMessage = {
+              sender: selectedCharacter.name,
+              blobUrl: audio.src,
+            };
             messaagesArray.push(iaMessage);
             setMessages(messaagesArray);
 
@@ -81,28 +135,6 @@ function Controler() {
             console.log(err.message);
             setIsLoading(false);
           });
-      });
-  };
-
-  const handleCharacterHover = (character) => {
-    const foundCharacter = iaCharacters.find((c) => c.name === character);
-    setHoveredCharacter(foundCharacter); // Mettre à jour le personnage survolé
-  };
-
-  // select character and send to server
-  const handleCharacterSelect = async (character) => {
-    const foundCharacter = iaCharacters.find((c) => c.name === character);
-    setSelectedCharacter(foundCharacter);
-    console.log("selectedCharacter", foundCharacter.id, foundCharacter.name);
-    await axios
-      .post("http://localhost:8000/select-character", {
-        id: foundCharacter.id,
-      })
-      .then((res) => {
-        console.log("response", res.data);
-      })
-      .catch((err) => {
-        console.log("erreur post handleCharacterSelect", err.message);
       });
   };
 
@@ -127,7 +159,7 @@ function Controler() {
                   key={index + audio.sender}
                   className={
                     "flex flex-col " +
-                    (audio.sender == "bob" && "flex items-end")
+                    (audio.sender == selectedCharacter.name && "flex items-end")
                   }
                 >
                   {/* sender */}
@@ -135,7 +167,7 @@ function Controler() {
                     <p
                       className={
                         "mb-2 " +
-                        (audio.sender == "bob"
+                        (audio.sender !== "me"
                           ? "text-right mr-2 italic"
                           : "ml-2 italic")
                       }

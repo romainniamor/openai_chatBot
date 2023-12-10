@@ -1,1 +1,1 @@
-[]
+[{"role": "user", "content": "Bye.\n"}, {"role": "assistant", "content": "No."}, {"role": "user", "content": "Yo.\n"}, {"role": "assistant", "content": "Yes."}, {"role": "user", "content": "Votre nom est Walter.\n"}, {"role": "assistant", "content": "Oui."}, {"role": "user", "content": "Il y en a une qui se bobe.\n"}, {"role": "assistant", "content": "Non."}]
