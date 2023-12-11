@@ -48,15 +48,19 @@ async def get_characters():
 class CharacterSelection(BaseModel):
     id: int
 
+selected_character_id = 0  # ID du personnage par défaut (premier personnage)
+
 @app.post('/select-character')
 async def select_character(selection: CharacterSelection = None):
+    global selected_character_id
     if selection is None or selection.id is None:
         # Sélection par défaut du premier personnage si aucun ID n'est spécifié
         selected_character = characters[0]
+        selected_character_id = selected_character['id']  # Mise à jour de la variable globale
         print('selected_character_by_default', selected_character)
         return selected_character
 
-    selected_character_id = selection.id
+    selected_character_id = selection.id  # Mise à jour de la variable globale
     print('selected_character_id', selected_character_id)
 
     for character in characters:
@@ -72,6 +76,7 @@ async def select_character(selection: CharacterSelection = None):
 #localhost:8000/docs - documentation for all API
 #reset db messages
 @app.get("/reset")
+
 async def reset_conversation():
     reset_db()
     return {"message": "conversation reset empty db"}
@@ -79,6 +84,8 @@ async def reset_conversation():
 #get audio
 @app.post("/audio-post")
 async def post_audio(file: UploadFile = File(...)):
+
+    global selected_character_id
 
     with open(file.filename, "wb") as buffer:
         buffer.write(file.file.read())
@@ -92,9 +99,18 @@ async def post_audio(file: UploadFile = File(...)):
     if not message_decoded:
         return HTTPException(status_code=404, detail="Decode failed")
     
-    chat_response = get_chat_response(message_decoded)
+
+
+       # Get selected character's voice ID
+    selected_character = next((c for c in characters if c['id'] == selected_character_id), characters[0])
+    id_voice = selected_character['id_voice']
+    prompt = selected_character['content']
+    print('id_voice', id_voice)
+    print('prompt', prompt)
+    
+    chat_response = get_chat_response(message_decoded, prompt)
     #store all messages in db
-    store_messages(message_decoded, chat_response)
+    store_messages(message_decoded, chat_response, prompt)
 
     print('chat_response', chat_response)
 
@@ -102,8 +118,10 @@ async def post_audio(file: UploadFile = File(...)):
     if not chat_response:
         return HTTPException(status_code=404, detail="Chat response failed")
     
+ 
+    
     #convert text to speech
-    audio_output = convert_text_to_speech(chat_response)
+    audio_output = convert_text_to_speech(chat_response, id_voice)
 
     if not audio_output:
         return HTTPException(status_code=404, detail="Problem audio output elevenlabs failed" )
@@ -111,6 +129,10 @@ async def post_audio(file: UploadFile = File(...)):
     #create a generator to stream audio
     def iter_file():
         yield audio_output
+        
 
-    #return audio
+    # return both text and audio
     return StreamingResponse(iter_file(), media_type="application/octet-stream")
+
+
+

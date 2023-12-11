@@ -31,8 +31,8 @@ def convert_audio_to_text(audio_file):
 #openi AI - chatGpt
 #get response from openAI
 
-def get_chat_response(message_input):
-    messages = get_messages()
+def get_chat_response(message_input, content):
+    messages = get_messages(content)
     user_message = {'role': 'user', 'content': message_input}
     messages.append(user_message)
     print ('messages recupere par chatgpt:', messages)

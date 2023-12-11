@@ -6,11 +6,11 @@ with open('characters.json') as file:
         characters = json.load(file)  
 
 #get all messages
-def get_messages():
+def get_messages(content):
     file_name = 'db.json'
     learn_instruction = {
         'role': 'system',
-        'content': 'your name is walter. You response yes or no. Response under 2 words'
+        'content': content
     }
 
     #initialize messages
@@ -48,10 +48,10 @@ def get_messages():
     return messages
 
 #add message to db
-def store_messages(request_message, response_message):
+def store_messages(request_message, response_message, content):
     file_name = 'db.json'
 
-    messages = get_messages()[1:]
+    messages = get_messages(content)[1:]
 
     user_message = {'role': 'user', 'content': request_message}
     assistant_message = {'role': 'assistant', 'content': response_message}

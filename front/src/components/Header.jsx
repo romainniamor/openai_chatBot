@@ -108,7 +108,7 @@ const Header = () => {
   }, []);
 
   return (
-    <div className="text-stone-900 grow flex flex-col align-items justify-between pl-8 py-16 ">
+    <div className="relative text-stone-900 grow flex flex-col align-items justify-between pl-8 py-16 ">
       <div>
         {" "}
         <h1
@@ -124,6 +124,7 @@ const Header = () => {
           >
             openai
           </h1>
+
           <div
             ref={linerRef}
             className="bg-gradient-to-r from-blue-300 to-yellow-300  h-2 absolute left-0 bottom-0 w-full scale-x-0"

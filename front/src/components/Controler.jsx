@@ -211,7 +211,7 @@ function Controler() {
 
             {messages.length === 0 && !isLoading && (
               <div className="text-center uppercase font-light mt-9">
-                send a message to {selectedCharacter.name} ...
+                send a message
               </div>
             )}
             {isLoading && (
@@ -221,7 +221,7 @@ function Controler() {
             )}
           </div>
         </div>
-        <div className="absolute bottom-0 left-0 w-full h-44 border-t flex items-center justify-center bg-gradient-to-r from-blue-300 to-lime-300">
+        <div className="absolute bottom-0 left-0 w-full h-min py-6 border-t flex items-center justify-center bg-gradient-to-r from-blue-300 to-lime-300">
           <RecordMessage handleStop={handlStop}></RecordMessage>
         </div>
       </div>

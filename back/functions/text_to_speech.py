@@ -10,13 +10,10 @@ ELEVEN_LABS_KEY = os.getenv("ELEVEN_LABS_KEY")
 
 
 
-
-
-
 #ELEVEN_LABS API - https://developers.eleven-labs.com/documentation/eleven-labs-api
 #Convert text to speech
 
-def convert_text_to_speech(message):
+def convert_text_to_speech(message, id_voice):
 
     #define body
     data = {
@@ -35,7 +32,7 @@ def convert_text_to_speech(message):
     headers = {'xi-api-key': ELEVEN_LABS_KEY,
                 'Content-Type': 'application/json',
                   'Accept': 'audio/mpeg'}
-    endpoint = f"https://api.elevenlabs.io/v1/text-to-speech/{man_voice}"
+    endpoint = f"https://api.elevenlabs.io/v1/text-to-speech/{id_voice}"
 
     #send request
 
