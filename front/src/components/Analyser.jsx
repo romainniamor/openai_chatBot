@@ -1,8 +1,28 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, onChange } from "react";
 
 import axios from "axios";
 
 function Analyser() {
+  //upload file to server
+  const handleFileUpload = async (e) => {
+    console.log("handleFileUpload");
+    const file = e.target.files[0]; // Récupération du fichier sélectionné
+    if (!file) return;
+
+    const formData = new FormData();
+    formData.append("file", file, file.name); // Ajout du fichier à formData
+    console.log("formData", formData.get("file"));
+
+    await axios
+      .post("http://localhost:8000/upload-pdf", formData)
+      .then((res) => {
+        const fileData = res.data;
+        console.log(fileData);
+      })
+      .catch((err) => {
+        console.log(err.message);
+      });
+  };
   return (
     <div className="flex h-full gap-10 justify-center">
       {/*  left part   */}
@@ -10,46 +30,55 @@ function Analyser() {
         <h2 className="text-stone-900 text-center  leading-10 text-4xl ">
           Discuss about your document with an IA
         </h2>
-        <div className="cursor-pointer mt-9 gap-4 flex justify-center items-center capitalize shadow-md text-xl bg-stone-900 text-white font-medium px-8 py-3 rounded-3xl transition-all duration-300 hover:-translate-y-1 hover:shadow-lg">
+
+        <input
+          id="fileInput"
+          className="hidden"
+          name="pdfFile"
+          type="file"
+          accept=".pdf"
+          onChange={handleFileUpload}
+        />
+        <label
+          htmlFor="fileInput"
+          className="cursor-pointer mt-9 gap-4 flex justify-center items-center capitalize shadow-md text-xl bg-stone-900 text-white font-medium px-8 py-3 rounded-3xl transition-all duration-300 hover:-translate-y-1 hover:shadow-lg"
+        >
           <span>Upload File</span>
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
             viewBox="0 0 24 24"
-            stroke-width="3"
+            strokeWidth="2.5"
             stroke="currentColor"
-            class="w-5 h-5"
+            className="w-5 h-5"
           >
             <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
+              strokeLinecap="round"
+              strokeLinejoin="round"
               d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5"
             />
           </svg>
-        </div>
+        </label>
       </div>
       <div className="relative flex flex-col h-full justify-center bg-white rounded-xl w-4/5 shadow-xl overflow-hidden">
-        <div className="relative flex justify-between items-center bg-stone-900 text-white font-semibold px-8 py-3 ">
-          <div className="italic capitalize">Text Analyser</div>
-          <form>
-            <input className="" type="file" />
-            <div className="px-2 py-2 cursor-pointer transition-all duration-300 hover:text-stone-900 hover:bg-white hover:rounded-full ">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke-width="2"
-                stroke="currentColor"
-                class="w-5 h-5"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5"
-                />
-              </svg>
-            </div>
-          </form>
+        <div className="flex justify-between items-center bg-stone-900 text-white font-semibold px-8 py-3 ">
+          <div className="italic capitalize">Analiza</div>
+          <button className="px-2 py-2 transition-all duration-300 hover:text-stone-900 hover:bg-white hover:rounded-full ">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              strokeWidth="2"
+              stroke="currentColor"
+              className="w-6 h-6"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182m0-4.991v4.99"
+              />
+            </svg>
+          </button>
         </div>
 
         <div className="flex flex-col gap-5 mt-10 px-10 h-full overflow-scroll">

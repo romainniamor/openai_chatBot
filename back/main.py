@@ -7,10 +7,10 @@ import json
 from fastapi.responses import StreamingResponse
 from fastapi.middleware.cors import CORSMiddleware
 from dotenv import load_dotenv
-from functions.openai_requests import convert_audio_to_text, get_chat_response
-from functions.database import get_messages, store_messages, reset_db
-from functions.text_to_speech import convert_text_to_speech
-from functions.database import characters
+from functions.controler.openai_requests import convert_audio_to_text, get_chat_response
+from functions.controler.database import get_messages, store_messages, reset_db
+from functions.controler.text_to_speech import convert_text_to_speech
+from functions.controler.database import characters
 from pydantic import BaseModel
 
 
@@ -136,3 +136,7 @@ async def post_audio(file: UploadFile = File(...)):
 
 
 
+@app.post("/upload-pdf")
+async def upload_pdf(file: UploadFile = File(...)):
+    return {"message": 'file uploaded'}
+    

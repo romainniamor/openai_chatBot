@@ -25,7 +25,9 @@ const Button = ({ title }) => {
   };
 
   return (
-    <div
+    <a
+      href="https://openai.com/"
+      target="_blank"
       className="px-8 py-2 bg-stone-900 rounded-3xl text-white flex items-center w-min cursor-pointer"
       onMouseEnter={() => {
         setHovered(true);
@@ -41,7 +43,7 @@ const Button = ({ title }) => {
       >
         &#8594;
       </div>
-    </div>
+    </a>
   );
 };
 
