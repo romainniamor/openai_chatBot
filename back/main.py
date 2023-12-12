@@ -17,6 +17,7 @@ from pydantic import BaseModel
 
 from functions.analyser.doc_to_text import get_pdf_text, get_text_chunks
 from functions.analyser.openai_embedings import get_vectorstore
+from functions.analyser.openai_embedings import get_conversation_chain
 
 
 #initiate app
@@ -155,6 +156,9 @@ async def upload_pdf(file: UploadFile = File(...)):
     #create vectorestore
     vectorestore = get_vectorstore(text_chunks)
     print('vectorestore', vectorestore)
+
+    #create conversation chain
+    conversation = get_conversation_chain(vectorestore)
   
     return {"message": 'file uploaded'}
     
