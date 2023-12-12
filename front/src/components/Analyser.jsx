@@ -3,11 +3,16 @@ import { useState, useRef, useEffect, onChange } from "react";
 import axios from "axios";
 
 function Analyser() {
+  const [fileInfo, setFileInfo] = useState(null);
   //upload file to server
   const handleFileUpload = async (e) => {
     console.log("handleFileUpload");
     const file = e.target.files[0]; // Récupération du fichier sélectionné
-    if (!file) return;
+    if (file) {
+      setFileInfo({
+        fileName: file.name,
+      });
+    }
 
     const formData = new FormData();
     formData.append("file", file, file.name); // Ajout du fichier à formData
@@ -30,7 +35,6 @@ function Analyser() {
         <h2 className="text-stone-900 text-center  leading-10 text-4xl ">
           Discuss about your document with an IA
         </h2>
-
         <input
           id="fileInput"
           className="hidden"
@@ -59,6 +63,7 @@ function Analyser() {
             />
           </svg>
         </label>
+        {fileInfo && <p>{fileInfo.fileName}</p>}
       </div>
       <div className="relative flex flex-col h-full justify-center bg-white rounded-xl w-4/5 shadow-xl overflow-hidden">
         <div className="flex justify-between items-center bg-stone-900 text-white font-semibold px-8 py-3 ">
