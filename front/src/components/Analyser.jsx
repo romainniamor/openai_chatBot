@@ -28,6 +28,34 @@ function Analyser() {
         console.log(err.message);
       });
   };
+
+  const [request, setRequest] = useState({ request: "" }); // request to IA
+
+  const handleChange = (e) => {
+    const value = e.target.value;
+    setRequest({
+      ...request,
+      [e.target.name]: value, // Dynamically set the property (name=request)
+    });
+  };
+
+  const handleSubmitRequest = async (e) => {
+    e.preventDefault();
+    const formData = new FormData();
+    formData.append("request", request.dataSend); // Make sure to send the request string
+    console.log("formData", formData.get("request"));
+    await axios
+      .post("http://localhost:8000/get-request", formData)
+      .then((res) => {
+        const data = res.data;
+        console.log("data:", data);
+        setRequest({ request: "" });
+      })
+      .catch((err) => {
+        console.log(err.message);
+      });
+    request.request = "";
+  };
   return (
     <div className="flex h-full gap-10 justify-center">
       {/*  left part   */}
@@ -102,10 +130,16 @@ function Analyser() {
         </div>
 
         <div className="w-full h-min py-6 border-t flex items-center justify-center bg-gradient-to-r from-blue-300 to-lime-300">
-          <form className="w-full flex justify-center">
+          <form
+            onSubmit={handleSubmitRequest}
+            className="w-full flex justify-center"
+          >
             <input
               type="text"
               placeholder="Your message..."
+              name="dataSend" // This should match the key in your state
+              value={request.dataSend || ""} // Bind the input value to the state
+              onChange={handleChange}
               className="w-4/5 p-4 border border-blue-200 rounded-3xl focus:outline-none focus:ring-2 focus:ring-blue-300 focus:border-transparent"
             />
           </form>

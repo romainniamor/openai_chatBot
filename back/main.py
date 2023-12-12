@@ -20,12 +20,10 @@ from functions.analyser.openai_embedings import get_vectorstore
 from functions.analyser.openai_embedings import get_conversation_chain
 
 
+#CONFIG
+
 #initiate app
 app = FastAPI()
-
- 
-
-
 
 #CORS - origins - URLS that can access this API
 #https://fastapi.tiangolo.com/tutorial/cors/
@@ -43,6 +41,8 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+#CONTROLER
 
 #get all characters
 @app.get('/characters')
@@ -140,7 +140,7 @@ async def post_audio(file: UploadFile = File(...)):
     # return both text and audio
     return StreamingResponse(iter_file(), media_type="application/octet-stream")
 
-
+#ANALYSER
 
 @app.post("/upload-pdf")
 async def upload_pdf(file: UploadFile = File(...)):
@@ -162,4 +162,8 @@ async def upload_pdf(file: UploadFile = File(...)):
   
     return {"message": 'file uploaded'}
     
-    
+
+@app.post("/get-request")
+async def get_request():
+    print('message')
+    return {"message": 'message received'}

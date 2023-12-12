@@ -20,6 +20,7 @@ def get_vectorstore(text_chunks):
     return vectorstore
 
 #conversation chain creation memory: https://python.langchain.com/docs/modules/memory/types/buffer
+#allow to generate new messages from previous messages, take history and return next message
 def get_conversation_chain(vectorstore):
     memory = ConversationBufferMemory(memory_key='chat_history', return_messages=True)
 
