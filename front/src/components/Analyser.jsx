@@ -15,7 +15,7 @@ function Analyser() {
     }
 
     const formData = new FormData();
-    formData.append("file", file, file.name); // Ajout du fichier à formData
+    formData.append("file", file); // Ajout du fichier à formData
     console.log("formData", formData.get("file"));
 
     await axios

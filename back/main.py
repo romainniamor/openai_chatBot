@@ -11,7 +11,12 @@ from functions.controler.openai_requests import convert_audio_to_text, get_chat_
 from functions.controler.database import get_messages, store_messages, reset_db
 from functions.controler.text_to_speech import convert_text_to_speech
 from functions.controler.database import characters
+
 from pydantic import BaseModel
+
+
+from functions.analyser.doc_to_text import get_pdf_text, get_text_chunks
+from functions.analyser.openai_embedings import get_vectorstore
 
 
 #initiate app
@@ -138,5 +143,19 @@ async def post_audio(file: UploadFile = File(...)):
 
 @app.post("/upload-pdf")
 async def upload_pdf(file: UploadFile = File(...)):
+
+    #get pdf text
+    raw_text = get_pdf_text(file)
+    print('raw_text', raw_text)
+
+    #get text chunks
+    text_chunks = get_text_chunks(raw_text)
+    print('text_chunks', text_chunks)
+
+    #create vectorestore
+    vectorestore = get_vectorstore(text_chunks)
+    print('vectorestore', vectorestore)
+  
     return {"message": 'file uploaded'}
+    
     

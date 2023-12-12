@@ -6,8 +6,8 @@ from functions.controler.database import get_messages
 
 load_dotenv()  # python-decouple ne marchait pas, utilisation dotenv pr load variables depuis .env
 
-openai.organization= os.getenv("OPEN_AI_ORG")
-openai.api_key = os.getenv("OPEN_AI_KEY")
+openai.organization= os.getenv("OPENAI_ORG")
+openai.api_key = os.getenv("OPENAI_API_KEY")
 
 
 #OPENAI API - https://platform.openai.com/docs/api-reference/audio/createTranscription?lang=python
