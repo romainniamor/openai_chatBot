@@ -169,6 +169,30 @@ class RequestResponse(BaseModel):
     bot: str
 
 @app.post("/get-request", response_model=RequestResponse)
-async def get_request(user: str = Form(...)):
+async def get_request(user_request: str = Form(...)):
+    
+    
     ia_response = "Réponse de l'IA"  # Simule la réponse de l'IA
-    return {"user": user, "bot": ia_response}
+    return {"user": user_request, "bot": ia_response}
+
+
+
+
+
+# @app.post("/get-request", response_model=RequestResponse)
+# async def get_request(user_request: str = Form(...)):
+
+#     if global_conversation_chain is None:
+#         raise HTTPException(status_code=500, detail="Conversation chain not initialized")
+    
+#     response = global_conversation_chain({'question': user_request})
+#     chat = response['chat_history']
+
+#     for i, message in chat:
+#         if i % 2 == 0:
+#             user_request = message.content
+#         else:
+#             ia_response = message.content
+
+    
+#     return {"user": user_request, "bot": ia_response}

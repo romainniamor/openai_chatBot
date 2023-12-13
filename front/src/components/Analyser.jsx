@@ -42,7 +42,7 @@ function Analyser() {
   const handleSubmitRequest = async (e) => {
     e.preventDefault();
     const formData = new FormData();
-    formData.append("user", userMessage);
+    formData.append("user_request", userMessage);
     console.log("formData", formData.get("user"));
 
     try {
@@ -56,7 +56,7 @@ function Analyser() {
 
       setUserMessage(""); // Réinitialiser l'input après l'envoi
     } catch (err) {
-      console.log(err.message, err.response.data);
+      console.log(err);
     }
   };
 
@@ -157,10 +157,10 @@ function Analyser() {
             className="w-full flex justify-center"
           >
             <input
-              disabled={!isUploaded}
+              // disabled={!isUploaded}
               type="text"
               placeholder="Your message..."
-              name="user" // This should match the key in your state
+              name="user_request" // This should match the key in your state
               value={userMessage || ""} // Bind the input value to the state
               onChange={handleChange}
               className="w-4/5 p-4 border border-blue-200 rounded-3xl focus:outline-none focus:ring-2 focus:ring-blue-300 focus:border-transparent"
