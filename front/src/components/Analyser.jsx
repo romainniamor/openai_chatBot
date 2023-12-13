@@ -4,6 +4,8 @@ import axios from "axios";
 
 function Analyser() {
   const [fileInfo, setFileInfo] = useState(null); //file info for upload input
+  const [isUploaded, setIsUploaded] = useState(false); //file is uploaded or not
+
   //upload file to server
   const handleFileUpload = async (e) => {
     console.log("handleFileUpload");
@@ -23,14 +25,15 @@ function Analyser() {
       .then((res) => {
         const fileData = res.data;
         console.log(fileData);
+        setIsUploaded(true);
       })
       .catch((err) => {
         console.log(err.message);
       });
   };
 
-  const [userMessage, setUserMessage] = useState(""); // Pour stocker le message de l'utilisateur
-  const [messages, setMessages] = useState([]); // Pour stocker tous les messages
+  const [userMessage, setUserMessage] = useState(""); // stock user message
+  const [messages, setMessages] = useState([]); // stock all messages
 
   const handleChange = (e) => {
     setUserMessage(e.target.value);
@@ -49,6 +52,7 @@ function Analyser() {
       );
       console.log("response", response.data);
       setMessages([...messages, response.data]);
+      console.log("messages", messages[0].user);
 
       setUserMessage(""); // Réinitialiser l'input après l'envoi
     } catch (err) {
@@ -115,6 +119,19 @@ function Analyser() {
         </div>
 
         <div className="flex flex-col gap-5 mt-10 px-10 h-full overflow-scroll">
+          <div className="flex justify-end">
+            <p className="px-5 py-3 rounded-xl shadow-md max-w-md">
+              Hi there, i'm Analysa your personal assistant and a very fast
+              reader, upload a pdf doc and let see what i can do for you!
+            </p>
+          </div>
+          {isUploaded && (
+            <div className="flex justify-end">
+              <p className="px-5 py-3 rounded-xl shadow-md max-w-md">
+                Nice, your doc is now uploaded, ask me something about it.
+              </p>
+            </div>
+          )}
           {messages.map((message, index) => (
             <div key={index}>
               {/* Message de l'utilisateur */}
@@ -140,6 +157,7 @@ function Analyser() {
             className="w-full flex justify-center"
           >
             <input
+              disabled={!isUploaded}
               type="text"
               placeholder="Your message..."
               name="user" // This should match the key in your state
