@@ -221,7 +221,7 @@ function Controler() {
             )}
           </div>
         </div>
-        <div className="absolute bottom-0 left-0 w-full h-min py-6 border-t flex items-center justify-center bg-gradient-to-r from-blue-300 to-lime-300">
+        <div className="absolute bottom-0 left-0 w-full h-min border-t flex items-center justify-center bg-gradient-to-r from-blue-300 to-lime-300">
           <RecordMessage handleStop={handlStop}></RecordMessage>
         </div>
       </div>

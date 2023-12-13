@@ -3,7 +3,7 @@ import { useState, useRef, useEffect, onChange } from "react";
 import axios from "axios";
 
 function Analyser() {
-  const [fileInfo, setFileInfo] = useState(null);
+  const [fileInfo, setFileInfo] = useState(null); //file info for upload input
   //upload file to server
   const handleFileUpload = async (e) => {
     console.log("handleFileUpload");
@@ -29,33 +29,31 @@ function Analyser() {
       });
   };
 
-  const [request, setRequest] = useState({ request: "" }); // request to IA
+  const [userMessage, setUserMessage] = useState(""); // Pour stocker le message de l'utilisateur
+  const [messages, setMessages] = useState([]); // Pour stocker tous les messages
 
   const handleChange = (e) => {
-    const value = e.target.value;
-    setRequest({
-      ...request,
-      [e.target.name]: value, // Dynamically set the property (name=request)
-    });
+    setUserMessage(e.target.value);
   };
 
   const handleSubmitRequest = async (e) => {
     e.preventDefault();
     const formData = new FormData();
-    formData.append("request", request.dataSend); // Make sure to send the request string
-    console.log("formData", formData.get("request"));
-    await axios
-      .post("http://localhost:8000/get-request", formData)
-      .then((res) => {
-        const data = res.data;
-        console.log("data:", data);
-        setRequest({ request: "" });
-      })
-      .catch((err) => {
-        console.log(err.message);
-      });
-    request.request = "";
+    formData.append("user", userMessage);
+    console.log("formData", formData.get("user"));
+
+    try {
+      const response = await axios.post(
+        "http://localhost:8000/get-request",
+        formData
+      );
+      setMessages([...messages, response.data]);
+      setUserMessage(""); // Réinitialiser l'input après l'envoi
+    } catch (err) {
+      console.log(err.message, err.response.data);
+    }
   };
+
   return (
     <div className="flex h-full gap-10 justify-center">
       {/*  left part   */}
@@ -115,18 +113,23 @@ function Analyser() {
         </div>
 
         <div className="flex flex-col gap-5 mt-10 px-10 h-full overflow-scroll">
-          <div className="flex justify-start">
-            <div className="px-5 py-3 rounded-xl shadow-md max-w-md">
-              Hi, I'm your personal assistant. Import your document and ask me
-              something about it.
-            </div>
-          </div>
+          {messages.map((message, index) => (
+            <div key={index}>
+              {/* Message de l'utilisateur */}
+              <div className="flex justify-start">
+                <p className="px-5 py-3 rounded-xl shadow-md max-w-md">
+                  {message.user}
+                </p>
+              </div>
 
-          <div className="flex justify-end">
-            <p className="px-5 py-3 rounded-xl shadow-md max-w-md">
-              What is the main topic of this document?
-            </p>
-          </div>
+              {/* Réponse de l'IA */}
+              <div className="flex justify-end">
+                <p className="px-5 py-3 rounded-xl shadow-md max-w-md">
+                  {message.bot}
+                </p>
+              </div>
+            </div>
+          ))}
         </div>
 
         <div className="w-full h-min py-6 border-t flex items-center justify-center bg-gradient-to-r from-blue-300 to-lime-300">
@@ -137,8 +140,8 @@ function Analyser() {
             <input
               type="text"
               placeholder="Your message..."
-              name="dataSend" // This should match the key in your state
-              value={request.dataSend || ""} // Bind the input value to the state
+              name="userMessage" // This should match the key in your state
+              value={userMessage || ""} // Bind the input value to the state
               onChange={handleChange}
               className="w-4/5 p-4 border border-blue-200 rounded-3xl focus:outline-none focus:ring-2 focus:ring-blue-300 focus:border-transparent"
             />

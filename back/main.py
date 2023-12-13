@@ -159,11 +159,13 @@ async def upload_pdf(file: UploadFile = File(...)):
 
     #create conversation chain
     conversation = get_conversation_chain(vectorestore)
+    print('conversation', conversation)
   
-    return {"message": 'file uploaded'}
+    return {"message": "pdf uploaded and treated"}
     
 
 @app.post("/get-request")
 async def get_request():
-    print('message')
-    return {"message": 'message received'}
+    ia_response = "Réponse de l'IA"
+    user_request = "Requête de l'utilisateur lorem ipsum generator user"
+    return {"user": user_request, "bot": ia_response}
