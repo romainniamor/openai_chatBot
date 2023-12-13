@@ -113,14 +113,14 @@ const Header = () => {
         {" "}
         <h1
           ref={titleRef}
-          className="text-9xl font-semibold uppercase leading-tight tracking-wider clip-custom overflow-hidden "
+          className="text-9xl font-semibold uppercase leading-tight tracking-wider clip-custom overflow-hidden  "
         >
           exploring
         </h1>
-        <div className="inline-block relative w-fit">
+        <div className="inline-block relative w-fit ">
           <h1
             ref={subTitleRef}
-            className="text-9xl font-semibold tracking-wide leading-none overflow-hidden inline-block"
+            className="text-9xl font-semibold tracking-wide leading-none overflow-hidden inline-block "
           >
             openai
           </h1>
@@ -132,7 +132,7 @@ const Header = () => {
         </div>
       </div>
       <div className="flex justify-between w-full mt-8">
-        <h2 ref={textRef} className=" text-4xl w-4/12 ">
+        <h2 ref={textRef} className=" text-4xl w-4/12">
           Creative and interactive tools
         </h2>
         <h3 className="text-2xl pr-8 ">Explore &#x2193; </h3>

@@ -2,6 +2,14 @@
 @tailwind components;
 @tailwind utilities;
 
+@font-face {
+  font-family: "footureregular";
+  src: url("./assets/fonts/footure-webfont.woff2") format("woff2"),
+    url("./assets/fonts/footure-webfont.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+}
+
 /* const css */
 :root {
   --stone-color: rgb(28 25 23);

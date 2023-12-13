@@ -142,6 +142,8 @@ async def post_audio(file: UploadFile = File(...)):
 
 #ANALYSER
 
+global_conversation_chain = None
+
 @app.post("/upload-pdf")
 async def upload_pdf(file: UploadFile = File(...)):
 
@@ -158,8 +160,18 @@ async def upload_pdf(file: UploadFile = File(...)):
     print('vectorestore', vectorestore)
 
     #create conversation chain
-    conversation = get_conversation_chain(vectorestore)
-    print('conversation', conversation)
+    global_conversation_chain = get_conversation_chain(vectorestore)
+    print('global_conversation_chain', global_conversation_chain)
+    response = global_conversation_chain({'question': 'Quelle est la couleur de la voiture ?'})
+    print('response', response)
+    chat = response['chat_history']
+    print('chat', chat)
+    user_request = chat[0].content
+    ia_response = chat[1].content
+    print('user_request', user_request, 'ia_response', ia_response)
+
+    
+   
   
     return {"message": "pdf uploaded and treated"}
     
@@ -170,29 +182,15 @@ class RequestResponse(BaseModel):
 
 @app.post("/get-request", response_model=RequestResponse)
 async def get_request(user_request: str = Form(...)):
+
+    if global_conversation_chain is None:
+        raise HTTPException(status_code=500, detail="Conversation chain not initialized")
     
     
-    ia_response = "Réponse de l'IA"  # Simule la réponse de l'IA
+    ia_response = "Réponse de l'IA"  
     return {"user": user_request, "bot": ia_response}
 
 
 
 
 
-# @app.post("/get-request", response_model=RequestResponse)
-# async def get_request(user_request: str = Form(...)):
-
-#     if global_conversation_chain is None:
-#         raise HTTPException(status_code=500, detail="Conversation chain not initialized")
-    
-#     response = global_conversation_chain({'question': user_request})
-#     chat = response['chat_history']
-
-#     for i, message in chat:
-#         if i % 2 == 0:
-#             user_request = message.content
-#         else:
-#             ia_response = message.content
-
-    
-#     return {"user": user_request, "bot": ia_response}

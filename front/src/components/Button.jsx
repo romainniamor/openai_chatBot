@@ -23,6 +23,18 @@ const Button = ({ title }) => {
       x: "-1rem",
     });
   };
+  const endAnimation = () => {
+    gsap.to(buttonArrowRef.current, {
+      duration: 0.8,
+      scale: 0,
+      ease: "power3.inOut",
+    });
+
+    gsap.to(buttonTitleRef.current, {
+      duration: 1,
+      x: 0,
+    });
+  };
 
   return (
     <a
@@ -32,6 +44,10 @@ const Button = ({ title }) => {
       onMouseEnter={() => {
         setHovered(true);
         startAnimation();
+      }}
+      onMouseLeave={() => {
+        setHovered(false);
+        endAnimation();
       }}
     >
       <div className="" ref={buttonTitleRef}>
