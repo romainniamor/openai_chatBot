@@ -47,7 +47,9 @@ function Analyser() {
         "http://localhost:8000/get-request",
         formData
       );
+      console.log("response", response.data);
       setMessages([...messages, response.data]);
+
       setUserMessage(""); // Réinitialiser l'input après l'envoi
     } catch (err) {
       console.log(err.message, err.response.data);
@@ -140,7 +142,7 @@ function Analyser() {
             <input
               type="text"
               placeholder="Your message..."
-              name="userMessage" // This should match the key in your state
+              name="user" // This should match the key in your state
               value={userMessage || ""} // Bind the input value to the state
               onChange={handleChange}
               className="w-4/5 p-4 border border-blue-200 rounded-3xl focus:outline-none focus:ring-2 focus:ring-blue-300 focus:border-transparent"

@@ -164,8 +164,11 @@ async def upload_pdf(file: UploadFile = File(...)):
     return {"message": "pdf uploaded and treated"}
     
 
-@app.post("/get-request")
-async def get_request():
-    ia_response = "Réponse de l'IA"
-    user_request = "Requête de l'utilisateur lorem ipsum generator user"
-    return {"user": user_request, "bot": ia_response}
+class RequestResponse(BaseModel):
+    user: str
+    bot: str
+
+@app.post("/get-request", response_model=RequestResponse)
+async def get_request(user: str = Form(...)):
+    ia_response = "Réponse de l'IA"  # Simule la réponse de l'IA
+    return {"user": user, "bot": ia_response}
