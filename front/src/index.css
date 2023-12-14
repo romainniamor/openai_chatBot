@@ -88,3 +88,7 @@ input[type="radio"] {
   background-color: var(--stone-color);
   color: white;
 }
+
+.recording {
+  scale: 1.1;
+}

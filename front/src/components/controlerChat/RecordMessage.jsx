@@ -12,15 +12,11 @@ function RecordMessage({ handleStop }) {
           <button
             onMouseDown={startRecording}
             onMouseUp={stopRecording}
-            className=" rounded-full p-5 shadow-md bg-white text-slate-400 hover:shadow-lg"
+            className={`rounded-full p-5 shadow-md bg-white text-slate-400 transition-all duration-300 hover:shadow-lg ${
+              status === "recording" ? "recording" : ""
+            } `}
           >
-            <RecordIcon
-              status={
-                status === "recording"
-                  ? " h-11 w-11 text-sky-500"
-                  : " text-sky-300"
-              }
-            ></RecordIcon>
+            <RecordIcon status={status === "recording"}></RecordIcon>
           </button>
         </div>
       )}
