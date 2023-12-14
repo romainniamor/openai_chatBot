@@ -113,21 +113,21 @@ const Header = () => {
         {" "}
         <h1
           ref={titleRef}
-          className="text-9xl font-semibold uppercase leading-tight tracking-wider clip-custom overflow-hidden  "
+          className="title font-semibold uppercase leading-tight tracking-wider  "
         >
           exploring
         </h1>
         <div className="inline-block relative w-fit ">
           <h1
             ref={subTitleRef}
-            className="text-9xl font-semibold tracking-wide leading-none overflow-hidden inline-block "
+            className="subtitle font-semibold tracking-wide  overflow-hidden inline-block "
           >
             openai
           </h1>
 
           <div
             ref={linerRef}
-            className="bg-gradient-to-r from-blue-300 to-yellow-300  h-2 absolute left-0 bottom-0 w-full scale-x-0"
+            className="bg-gradient-to-r from-blue-300 to-yellow-300  h-4 absolute left-0 -bottom-3 w-full scale-x-0"
           ></div>
         </div>
       </div>

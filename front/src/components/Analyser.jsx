@@ -43,7 +43,8 @@ function Analyser() {
     e.preventDefault();
     const formData = new FormData();
     formData.append("user_request", userMessage);
-    console.log("formData", formData.get("user"));
+    console.log("formData", formData.get("user_request"));
+    setUserMessage("");
 
     try {
       const response = await axios.post(
@@ -51,10 +52,10 @@ function Analyser() {
         formData
       );
       console.log("response", response.data);
-      setMessages([...messages, response.data]);
-      console.log("messages", messages[0].user);
 
-      setUserMessage(""); // Réinitialiser l'input après l'envoi
+      setMessages([...messages, response.data]);
+
+      // Réinitialiser l'input après l'envoi
     } catch (err) {
       console.log(err);
     }

@@ -146,6 +146,7 @@ global_conversation_chain = None
 
 @app.post("/upload-pdf")
 async def upload_pdf(file: UploadFile = File(...)):
+    global global_conversation_chain
 
     #get pdf text
     raw_text = get_pdf_text(file)
@@ -161,14 +162,7 @@ async def upload_pdf(file: UploadFile = File(...)):
 
     #create conversation chain
     global_conversation_chain = get_conversation_chain(vectorestore)
-    print('global_conversation_chain', global_conversation_chain)
-    response = global_conversation_chain({'question': 'Quelle est la couleur de la voiture ?'})
-    print('response', response)
-    chat = response['chat_history']
-    print('chat', chat)
-    user_request = chat[0].content
-    ia_response = chat[1].content
-    print('user_request', user_request, 'ia_response', ia_response)
+   
 
     
    
@@ -182,12 +176,25 @@ class RequestResponse(BaseModel):
 
 @app.post("/get-request", response_model=RequestResponse)
 async def get_request(user_request: str = Form(...)):
+    global global_conversation_chain
+   
 
     if global_conversation_chain is None:
         raise HTTPException(status_code=500, detail="Conversation chain not initialized")
+    else:
+        
+        print('global_conversation_chain', global_conversation_chain)
+        response = global_conversation_chain({'question': user_request})
+        print('response', response)
+        chat = response['chat_history']
+        print('chat', chat)
+        user_request = chat[0].content
+        ia_response = chat[1].content
+        print('user_request', user_request, 'ia_response', ia_response)
+        
     
     
-    ia_response = "Réponse de l'IA"  
+   
     return {"user": user_request, "bot": ia_response}
 
 
