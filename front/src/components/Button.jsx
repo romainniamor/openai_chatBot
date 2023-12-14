@@ -55,7 +55,7 @@ const Button = ({ title }) => {
       </div>
       <div
         ref={buttonArrowRef}
-        className="bg-gradient-to-r from-blue-300 to-yellow-300 -ml-6  scale-0 text-stone-900 rounded-full px-2 py-1"
+        className="bg-gradient-to-r from-blue-300 to-lime-300 -ml-6  scale-0 text-stone-900 rounded-full px-2 py-1"
       >
         &#8594;
       </div>

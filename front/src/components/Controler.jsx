@@ -3,6 +3,7 @@ import Title from "./controlerChat/Title";
 import RecordMessage from "./controlerChat/RecordMessage";
 import axios from "axios";
 import CharacterSelect from "./controlerForm/CharacterSelect";
+import Loader from "./loader";
 
 function Controler() {
   const [iaCharacters, setIaCharacters] = useState([]);
@@ -165,63 +166,61 @@ function Controler() {
   return (
     <div className="flex h-full gap-10 justify-center">
       {/*  left part   */}
-      <div className="h-full w-4/12 bg-white rounded-xl overflow-hidden relative shadow-xl">
+      <div className=" flex flex-col h-full w-4/12 bg-white rounded-xl overflow-hidden shadow-xl">
         <Title
           setMessages={setMessages}
           selectedCharacter={selectedCharacter}
           resetConversation={resetConversation}
-        />
+        ></Title>
         <div
-          className="flex flex-col justify-between h-full overflow-y-scroll"
-          style={{ paddingBottom: "4rem" }}
+          className="relative flex flex-col grow gap-2 overflow-scroll p-10"
           ref={chatRef}
         >
           {/* conversation */}
-          <div className="mt-4 px-3 ">
-            {messages.map((audio, index) => {
-              return (
-                <div
-                  key={index + audio.sender}
-                  className={
-                    "flex flex-col " +
-                    (audio.sender == selectedCharacter.name && "flex items-end")
-                  }
-                >
-                  {/* sender */}
-                  <div className="mt-4 capitalize">
-                    <p
-                      className={
-                        "mb-2 " +
-                        (audio.sender !== "me"
-                          ? "text-right mr-2 italic"
-                          : "ml-2 italic")
-                      }
-                    >
-                      {audio.sender}
-                    </p>
-                    <audio
-                      src={audio.blobUrl}
-                      className="appearance-none"
-                      controls
-                    />
-                  </div>
-                </div>
-              );
-            })}
 
-            {messages.length === 0 && !isLoading && (
-              <div className="text-center uppercase font-light mt-9">
-                send a message
+          {messages.map((audio, index) => {
+            return (
+              <div
+                key={index + audio.sender}
+                className={
+                  "flex flex-col " +
+                  (audio.sender == selectedCharacter.name && "flex items-end")
+                }
+              >
+                {/* sender */}
+                <div className="mt-4 capitalize">
+                  <p
+                    className={
+                      "mb-2 " +
+                      (audio.sender !== "me"
+                        ? "text-right mr-2 italic"
+                        : "ml-2 italic")
+                    }
+                  >
+                    {audio.sender}
+                  </p>
+                  <audio
+                    src={audio.blobUrl}
+                    className="appearance-none"
+                    controls
+                  />
+                </div>
               </div>
-            )}
-            {isLoading && (
-              <div className="text-center uppercase font-light mt-9 animate-pulse">
-                loading
-              </div>
-            )}
-          </div>
+            );
+          })}
+
+          {messages.length === 0 && !isLoading && (
+            <div className="text-center uppercase font-light mt-9">
+              send a message
+            </div>
+          )}
+          {isLoading && (
+            <div className="absolute bottom-0 left-0 w-full h-full bg-slate-100/90 flex justify-center items-center z-10 ">
+              <Loader></Loader>
+            </div>
+          )}
         </div>
-        <div className="absolute bottom-0 left-0 w-full h-min border-t flex items-center justify-center bg-gradient-to-r from-blue-300 to-lime-300">
+        <div className="w-full h-min py-6 border-t flex items-center justify-center bg-gradient-to-r from-blue-300 to-lime-300">
           <RecordMessage handleStop={handlStop}></RecordMessage>
         </div>
       </div>

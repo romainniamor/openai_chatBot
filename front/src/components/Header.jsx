@@ -127,7 +127,7 @@ const Header = () => {
 
           <div
             ref={linerRef}
-            className="bg-gradient-to-r from-blue-300 to-yellow-300  h-4 absolute left-0 -bottom-3 w-full scale-x-0"
+            className="bg-gradient-to-r from-blue-300 to-lime-300  h-4 absolute left-0 -bottom-3 w-full scale-x-0"
           ></div>
         </div>
       </div>

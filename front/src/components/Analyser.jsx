@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect, onChange } from "react";
+import Loader from "./loader";
 
 import axios from "axios";
 
@@ -34,7 +35,7 @@ function Analyser() {
 
   const [userMessage, setUserMessage] = useState(""); // stock user message
   const [messages, setMessages] = useState([]); // stock all messages
-
+  const [isLoading, setIsLoading] = useState(false);
   const handleChange = (e) => {
     setUserMessage(e.target.value);
   };
@@ -43,6 +44,8 @@ function Analyser() {
     e.preventDefault();
     const formData = new FormData();
     formData.append("user_request", userMessage);
+    setIsLoading(true);
+
     console.log("formData", formData.get("user_request"));
     setUserMessage("");
 
@@ -54,6 +57,7 @@ function Analyser() {
       console.log("response", response.data);
 
       setMessages([...messages, response.data]);
+      setIsLoading(false);
 
       // Réinitialiser l'input après l'envoi
     } catch (err) {
@@ -98,6 +102,7 @@ function Analyser() {
         </label>
         {fileInfo && <p>{fileInfo.fileName}</p>}
       </div>
+
       <div className="relative flex flex-col h-full justify-center bg-white rounded-xl w-4/5 shadow-xl overflow-hidden">
         <div className="flex justify-between items-center bg-stone-900 text-white font-semibold px-8 py-3 ">
           <div className="italic capitalize">Analiza</div>
@@ -119,7 +124,12 @@ function Analyser() {
           </button>
         </div>
 
-        <div className="flex flex-col gap-5 mt-10 px-10 h-full overflow-scroll">
+        <div className="relative flex flex-col gap-5  p-10 h-full overflow-scroll">
+          {isLoading && (
+            <div className="absolute bottom-0 left-0 w-full h-full bg-slate-100/90 flex justify-center items-center z-10 ">
+              <Loader></Loader>
+            </div>
+          )}
           <div className="flex justify-end">
             <p className="px-5 py-3 rounded-xl shadow-md max-w-md">
               Hi there, i'm Analysa your personal assistant and a very fast
