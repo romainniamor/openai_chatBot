@@ -143,6 +143,9 @@ async def post_audio(file: UploadFile = File(...)):
 #ANALYSER
 
 global_conversation_chain = None
+chat = None
+
+
 
 @app.post("/upload-pdf")
 async def upload_pdf(file: UploadFile = File(...)):
@@ -174,9 +177,10 @@ class RequestResponse(BaseModel):
     user: str
     bot: str
 
-@app.post("/get-request", response_model=RequestResponse)
+@app.post("/get-request")
 async def get_request(user_request: str = Form(...)):
     global global_conversation_chain
+    global chat
    
 
     if global_conversation_chain is None:
@@ -187,15 +191,17 @@ async def get_request(user_request: str = Form(...)):
         response = global_conversation_chain({'question': user_request})
         print('response', response)
         chat = response['chat_history']
-        print('chat', chat)
-        user_request = chat[0].content
-        ia_response = chat[1].content
-        print('user_request', user_request, 'ia_response', ia_response)
-        
-    
-    
-   
-    return {"user": user_request, "bot": ia_response}
+        conversation = []
+
+        for i in range(0, len(chat), 2): # On parcourt la liste par pas de 2 pour avoir des paires question/réponse
+            pair = {
+                "question": chat[i].content if i < len(chat) else None, # On vérifie qu'on ne dépasse pas la taille de la liste
+                "response": chat[i + 1].content if i + 1 < len(chat) else None 
+            }
+            conversation.append(pair)
+        print('conversation', conversation)
+           
+    return {"conversation": conversation}
 
 
 

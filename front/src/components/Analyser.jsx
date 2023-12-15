@@ -54,9 +54,13 @@ function Analyser() {
         "http://localhost:8000/get-request",
         formData
       );
-      console.log("response", response.data);
+      console.log("data send from backend", response.data);
+      console.log("data send from backend", response.data.conversation);
+      const conversation = response.data.conversation;
+      const lastMessages = conversation[conversation.length - 1];
+      console.log("lastMessages", lastMessages);
 
-      setMessages([...messages, response.data]);
+      setMessages([...messages, lastMessages]);
       setIsLoading(false);
 
       // Réinitialiser l'input après l'envoi
@@ -143,19 +147,20 @@ function Analyser() {
               </p>
             </div>
           )}
-          {messages.map((message, index) => (
+
+          {messages.map((pair, index) => (
             <div key={index}>
-              {/* Message de l'utilisateur */}
+              {/* Afficher la question */}
               <div className="flex justify-start">
                 <p className="px-5 py-3 rounded-xl shadow-md max-w-md">
-                  {message.user}
+                  {pair.question}
                 </p>
               </div>
 
-              {/* Réponse de l'IA */}
+              {/* Afficher la réponse */}
               <div className="flex justify-end">
                 <p className="px-5 py-3 rounded-xl shadow-md max-w-md">
-                  {message.bot}
+                  {pair.response}
                 </p>
               </div>
             </div>
@@ -168,7 +173,7 @@ function Analyser() {
             className="w-full flex justify-center"
           >
             <input
-              // disabled={!isUploaded}
+              disabled={!isUploaded}
               type="text"
               placeholder="Your message..."
               name="user_request" // This should match the key in your state

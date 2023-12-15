@@ -108,11 +108,12 @@ function Controler() {
 
         const formData = new FormData();
         formData.append("file", blob, "myFile.wav");
+        console.log("formData", formData.get("file"));
 
         //send file to server
         await axios
           .post("http://localhost:8000/audio-post", formData, {
-            headers: { "content-type": "audio/mpeg" },
+            headers: { "content-type": "audio/wav" },
             responseType: "arraybuffer",
           })
           .then((res) => {
